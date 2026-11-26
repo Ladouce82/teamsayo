@@ -1,0 +1,128 @@
+name: Platform (test & deploy)
+
+on:
+  push:
+    branches: [main, develop, backend]
+    paths: ['platform/**', 'public/index.html', '.github/workflows/platform.yml']
+  pull_request:
+    paths: ['platform/**', 'public/index.html']
+  workflow_dispatch:
+
+concurrency:
+  group: platform-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env: { MYSQL_DATABASE: teamsayo_test, MYSQL_ROOT_PASSWORD: root }
+        ports: ['3306:3306']
+        options: --health-cmd="mysqladmin ping -proot" --health-interval=5s --health-timeout=5s --health-retries=20
+    defaults: { run: { working-directory: platform } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.3', extensions: 'mbstring, pdo_mysql, intl, zip, gd', coverage: none }
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Print composer.lock (when not committed yet)
+        run: if ! git ls-files --error-unmatch composer.lock >/dev/null 2>&1; then echo "LOCKB64:$(gzip -9c composer.lock | base64 -w0)"; fi
+      - name: Bundle the app page
+        run: mkdir -p resources/app && cp ../public/index.html resources/app/teamsayo.html && touch .env
+      - name: Tests (MySQL)
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: teamsayo_test
+          DB_USERNAME: root
+          DB_PASSWORD: root
+          APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+        run: php artisan test --display-warnings
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with: { name: laravel-log, path: platform/storage/logs, if-no-files-found: ignore }
+
+  deploy:
+    needs: test
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+    env:
+      TS_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check deploy configuration
+        id: cfg
+        env: { H: '${{ secrets.SSH_HOST }}', K: '${{ secrets.SSH_PRIVATE_KEY }}', D: '${{ secrets.DB_DATABASE }}' }
+        run: |
+          if [ -z "$H" ] || [ -z "$K" ] || [ -z "$D" ]; then echo "::warning::SSH/DB secrets not set for $TS_ENV — backend deploy skipped."; echo "ok=0" >> $GITHUB_OUTPUT; else echo "ok=1" >> $GITHUB_OUTPUT; fi
+      - uses: shivammathur/setup-php@v2
+        if: steps.cfg.outputs.ok == '1'
+        with: { php-version: '8.3', extensions: 'mbstring, pdo_mysql, intl, zip, gd', coverage: none }
+      - name: Build release
+        if: steps.cfg.outputs.ok == '1'
+        working-directory: platform
+        run: |
+          composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-progress
+          mkdir -p resources/app && cp ../public/index.html resources/app/teamsayo.html
+          rm -rf tests storage/logs/* .env
+      - name: Write environment file
+        if: steps.cfg.outputs.ok == '1'
+        working-directory: platform
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          DB_HOST: ${{ vars.DB_HOST || 'localhost' }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT || '465' }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MAIL_FROM_ADDRESS: ${{ vars.MAIL_FROM_ADDRESS || 'no-reply@teamsayo.com' }}
+          PAYPAL_MODE: ${{ vars.PAYPAL_MODE || 'sandbox' }}
+          PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
+          PAYPAL_SECRET: ${{ secrets.PAYPAL_SECRET }}
+          STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
+          TEST_ACCOUNTS_PASSWORD: ${{ secrets.TEST_ACCOUNTS_PASSWORD }}
+          LEGAL_COMPANY: ${{ vars.LEGAL_COMPANY }}
+          LEGAL_ADDRESS: ${{ vars.LEGAL_ADDRESS }}
+          LEGAL_DIRECTOR: ${{ vars.LEGAL_DIRECTOR }}
+          LEGAL_EMAIL: ${{ vars.LEGAL_EMAIL }}
+          LEGAL_PHONE: ${{ vars.LEGAL_PHONE }}
+          LEGAL_REGISTER: ${{ vars.LEGAL_REGISTER }}
+          LEGAL_VAT_ID: ${{ vars.LEGAL_VAT_ID }}
+        run: |
+          q() { printf '%s="%s"\n' "$1" "$(printf '%s' "$2" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\$/\\$/g' | sed ':a;N;$!ba;s/\n/\\n/g')"; }
+          {
+            q APP_NAME TeamSayo; q APP_ENV "$TS_ENV"; q APP_DEBUG false; q APP_URL "$APP_URL"; q LOG_CHANNEL daily; q LOG_LEVEL warning
+            q DB_CONNECTION mysql; q DB_HOST "$DB_HOST"; q DB_PORT 3306; q DB_DATABASE "$DB_DATABASE"; q DB_USERNAME "$DB_USERNAME"; q DB_PASSWORD "$DB_PASSWORD"
+            q SESSION_DRIVER database; q SESSION_LIFETIME 480; q SESSION_ENCRYPT true; q SESSION_SECURE_COOKIE true; q QUEUE_CONNECTION database; q CACHE_STORE database
+            q MAIL_MAILER smtp; q MAIL_HOST "$MAIL_HOST"; q MAIL_PORT "$MAIL_PORT"; q MAIL_SCHEME "$([ "$MAIL_PORT" = 465 ] && echo smtps || echo smtp)"; q MAIL_USERNAME "$MAIL_USERNAME"; q MAIL_PASSWORD "$MAIL_PASSWORD"; q MAIL_FROM_ADDRESS "$MAIL_FROM_ADDRESS"; q MAIL_FROM_NAME TeamSayo
+            q PAYPAL_MODE "$PAYPAL_MODE"; q PAYPAL_CLIENT_ID "$PAYPAL_CLIENT_ID"; q PAYPAL_SECRET "$PAYPAL_SECRET"
+            q STAGING_PASSWORD "$STAGING_PASSWORD"; q TEST_ACCOUNTS_PASSWORD "$TEST_ACCOUNTS_PASSWORD"
+            q LEGAL_COMPANY "$LEGAL_COMPANY"; q LEGAL_ADDRESS "$LEGAL_ADDRESS"; q LEGAL_DIRECTOR "$LEGAL_DIRECTOR"; q LEGAL_EMAIL "$LEGAL_EMAIL"; q LEGAL_PHONE "$LEGAL_PHONE"; q LEGAL_REGISTER "$LEGAL_REGISTER"; q LEGAL_VAT_ID "$LEGAL_VAT_ID"
+          } > .env.deploy
+      - name: Upload and activate
+        if: steps.cfg.outputs.ok == '1'
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          WEB_DIR: ${{ vars.WEB_DIR }}
+          PHP_BIN: ${{ vars.PHP_BIN }}
+        run: |
+          mkdir -p ~/.ssh && printf '%s\n' "$SSH_KEY" > ~/.ssh/id && chmod 600 ~/.ssh/id
+          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          S="ssh -i ~/.ssh/id -p $SSH_PORT $SSH_USER@$SSH_HOST"
+          REL="teamsayo/$TS_ENV/releases/$GITHUB_SHA"
+          $S "mkdir -p ~/$REL"
+          tar -C platform -czf - . | $S "tar -xzf - -C ~/$REL"
+          $S "WEB_DIR='$WEB_DIR' PHP_BIN='$PHP_BIN' bash ~/$REL/deploy/remote.sh '$TS_ENV' '$GITHUB_SHA'"
+          rm -f ~/.ssh/id
