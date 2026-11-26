@@ -33,7 +33,7 @@ class PagesTest extends TestCase
 
     public function test_non_staff_cannot_open_the_operator_console(): void
     {
-        $this->actingAs(User::factory()->create())->get('/admin')->assertForbidden();
+        $this->actingAs(User::factory()->create())->get('/admin')->assertNotFound();   // the console is hidden from non-staff
     }
 
     public function test_director_sees_members_page(): void
