@@ -2018,7 +2018,8 @@ NAV.splice(NAV.findIndex(n => n[0] === 'Execution'), 0, ['Team cadence'], ['spri
 NAV.splice(NAV.findIndex(n => n[0] === 'impact'), 0, ['analytics','🧮','Analytics & SQL', () => can('reports')]);
 Object.assign(TITLES, {sprint:'Sprint overview', kpis:'KPIs', ceremonies:'Ceremonies & attendance', capgrid:'Capacity', mentor:'Mentorship', jobsearch:'Job search', speaking:'Public speaking', projects:'Projects & white papers', media:'Media hub', recognition:'Recognition', analytics:'Analytics & SQL'});
 Object.assign(DE, {'Team cadence':'Team-Rhythmus','Sprint overview':'Sprint-Übersicht','Ceremonies & attendance':'Zeremonien & Anwesenheit','Capacity':'Kapazität','Mentorship':'Mentoring','Job search':'Jobsuche','Public speaking':'Vorträge','Projects & white papers':'Projekte & Whitepaper','Media hub':'Medien','Recognition':'Anerkennung','Analytics & SQL':'Analysen & SQL'});
-boot();
+// When served by the TeamSayo platform, the server connector (injected after this script) boots the app instead.
+document.addEventListener('DOMContentLoaded', () => window.TS_SERVER ? TS_SERVER.boot() : boot());
 
 </script>
 </body>

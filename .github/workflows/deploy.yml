@@ -24,7 +24,10 @@ jobs:
           printf '\n<IfModule mod_headers.c>\n  Header always set X-Robots-Tag "noindex, nofollow"\n</IfModule>\n' >> public/.htaccess
           printf 'User-agent: *\nDisallow: /\n' > public/robots.txt
 
+      # Once the Laravel platform is deployed over SSH (platform.yml), set the environment variable
+      # BACKEND_LIVE=true so this static upload stops writing into the platform folder.
       - name: Choose what goes to the platform folder
+        if: vars.BACKEND_LIVE != 'true'
         id: src
         run: |
           # Production shows the early-access page until the real platform launches.
@@ -32,6 +35,7 @@ jobs:
           if [ "${{ github.ref_name }}" = "main" ]; then echo "dir=./site-app/" >> "$GITHUB_OUTPUT"; else echo "dir=./public/" >> "$GITHUB_OUTPUT"; fi
 
       - name: Upload platform over FTPS
+        if: vars.BACKEND_LIVE != 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}

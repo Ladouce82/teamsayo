@@ -3,3 +3,10 @@
 .DS_Store
 node_modules/
 *.log
+platform/vendor/
+platform/.env
+platform/.env.deploy
+platform/resources/app/teamsayo.html
+platform/storage/*.key
+platform/storage/logs/*.log
+platform/database/*.sqlite
