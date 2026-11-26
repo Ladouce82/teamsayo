@@ -28,6 +28,9 @@ jobs:
         with: { php-version: '8.3', extensions: 'mbstring, pdo_mysql, intl, zip, gd', coverage: none }
       - name: Composer install
         run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Keep the resolved composer.lock
+        uses: actions/upload-artifact@v4
+        with: { name: composer-lock, path: platform/composer.lock }
       - name: Bundle the app page
         run: mkdir -p resources/app && cp ../public/index.html resources/app/teamsayo.html
       - name: Tests (MySQL)
