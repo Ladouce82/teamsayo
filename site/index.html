@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TeamSayo — From decision to done</title>
+<meta name="description" content="TeamSayo turns meetings, decisions and team records into tracked commitments and evidence-backed reports — across all your companies.">
+<meta name="theme-color" content="#0f1f3d">
+<meta property="og:title" content="TeamSayo — From decision to done">
+<meta property="og:description" content="Every decision delivered, every result proven — across all your companies.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b8f8f'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--navy:#0f1f3d;--navy2:#12395a;--teal:#0b8f8f;--teal2:#e6f6f6;--ink:#1c2433;--mute:#5d6676;--line:#e4e7ec;--bg:#f6f7fb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);line-height:1.55;background:#fff}
+a{color:inherit}:focus-visible{outline:3px solid #f5b70a;outline-offset:3px;border-radius:6px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:10;background:rgba(15,31,61,.96);backdrop-filter:blur(6px)}
+.nav{display:flex;align-items:center;gap:22px;height:64px;color:#d5dcea}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:19px;text-decoration:none}
+.logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#0fa3a3,#3ccfcf);display:grid;place-items:center;color:#fff}
+.nav a.l{text-decoration:none;font-size:14.5px;opacity:.9}.nav a.l:hover{opacity:1;text-decoration:underline}
+.sp{flex:1}
+.btn{display:inline-block;padding:11px 18px;border-radius:10px;font-weight:600;text-decoration:none;font-size:15px;border:1px solid transparent}
+.btn.p{background:var(--teal);color:#fff}.btn.p:hover{filter:brightness(1.08)}
+.btn.g{border-color:rgba(255,255,255,.45);color:#fff}.btn.g:hover{background:rgba(255,255,255,.08)}
+.btn.o{border-color:var(--line);color:var(--ink);background:#fff}
+.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:84px 0 96px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-180px;top:-120px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(60,207,207,.28),transparent 65%)}
+.hero .g2{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;position:relative;z-index:1}
+.kick{display:inline-block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#9fe3e3;background:rgba(60,207,207,.12);padding:5px 12px;border-radius:99px}
+h1{font-size:50px;line-height:1.08;margin:18px 0 16px;letter-spacing:-.02em}
+.lead{font-size:19px;color:#cfd8e8;max-width:560px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.note{font-size:13px;color:#9fb0cf;margin-top:14px}
+.mock{background:#fff;border-radius:16px;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,.35);color:var(--ink)}
+.mock .row{display:flex;gap:10px;align-items:center}
+.mk{border:1px solid var(--line);border-radius:10px;padding:10px 12px;flex:1}.mk b{display:block;font-size:22px}.mk span{font-size:12px;color:var(--mute)}
+.chain{display:flex;gap:6px;align-items:center;margin:12px 0;font-size:12.5px}.chain div{flex:1;background:var(--teal2);border-radius:8px;padding:8px 4px;text-align:center}.chain b{display:block;font-size:17px}
+.item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:8px 2px;font-size:13.5px}
+.pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px}.r{background:#fef3f2;color:#c4231a}.gr{background:#ecfdf3;color:#067647}.bl{background:#eff8ff;color:#175cd3}
+section{padding:84px 0}section.alt{background:var(--bg)}
+h2{font-size:34px;letter-spacing:-.01em;margin:0 0 12px}
+.sub{color:var(--mute);font-size:17px;max-width:720px;margin:0 0 36px}
+.grid{display:grid;gap:20px}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px}
+.card h3{margin:10px 0 6px;font-size:18px}.card p{margin:0;color:var(--mute);font-size:15px}
+.ic{width:42px;height:42px;border-radius:11px;background:var(--teal2);display:grid;place-items:center;font-size:21px}
+.num{font-size:13px;font-weight:700;color:var(--teal);letter-spacing:.08em}
+ul.ck{list-style:none;padding:0;margin:14px 0 0}ul.ck li{padding:5px 0 5px 26px;position:relative;font-size:15px}ul.ck li:before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:700}
+.price .card{display:flex;flex-direction:column}.price .amt{font-size:32px;font-weight:800;margin:8px 0 0}.price .per{color:var(--mute);font-size:13px}
+.price .hot{border:2px solid var(--teal);position:relative}.price .hot:before{content:"Most popular";position:absolute;top:-12px;left:20px;background:var(--teal);color:#fff;font-size:12px;font-weight:600;padding:2px 10px;border-radius:99px}
+.cta{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:20px;padding:48px;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.cta p{color:#cfd8e8;margin:6px 0 0}
+footer{padding:36px 0;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}
+.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:13.5px;color:#cfd8e8}.trust span:before{content:"● ";color:#3ccfcf}
+@media(max-width:900px){.hero .g2,.g3,.g4{grid-template-columns:1fr}h1{font-size:38px}.nav a.l{display:none}.mock{display:none}section{padding:60px 0}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="#top" aria-label="TeamSayo home"><span class="logo" aria-hidden="true">✓</span>TeamSayo</a><span class="sp"></span>
+<a class="l" href="#how">How it works</a><a class="l" href="#features">Features</a><a class="l" href="#who">Who it's for</a><a class="l" href="#pricing">Pricing</a>
+<a class="btn p" href="app/">Open the platform</a></div></header>
+
+<main id="top">
+<section class="hero"><div class="wrap g2">
+  <div>
+    <span class="kick">Workforce performance & accountability</span>
+    <h1>Every decision delivered.<br>Every result proven.</h1>
+    <p class="lead">TeamSayo turns meetings, decisions and team records into tracked commitments, live KPIs and evidence-backed reports — across all your companies, in one place.</p>
+    <div class="ctas"><a class="btn p" href="app/">Open the platform →</a><a class="btn g" href="#how">See how it works</a></div>
+    <p class="note">Early-access preview: explore with demo accounts — no sign-up needed.</p>
+    <div class="trust"><span>Built for GDPR and the EU AI Act</span><span>GDPR-first</span><span>AI that cites its sources</span><span>Your data, exportable any time</span></div>
+  </div>
+  <div class="mock" aria-hidden="true">
+    <div class="row"><div class="mk"><b>8.5</b><span>Sprint KPI score</span></div><div class="mk"><b>92%</b><span>Attendance</span></div><div class="mk"><b>9/13</b><span>Certifications</span></div></div>
+    <div class="chain"><div><b>4</b>Goals</div>→<div><b>12</b>Decisions</div>→<div><b>31</b>Actions</div>→<div><b>24</b>Delivered</div></div>
+    <div class="item"><span>Send batch 1 to client</span><span class="pill bl">In progress</span></div>
+    <div class="item"><span>Collect missing website content</span><span class="pill r">Escalated</span></div>
+    <div class="item"><span>Board report · November</span><span class="pill gr">Approved</span></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <h2>From decision to done — in three moments</h2>
+  <p class="sub">Most teams don't lack meetings or strategy. They lose track between a decision and its delivery. TeamSayo closes that gap.</p>
+  <div class="grid g3">
+    <div class="card"><span class="num">01 · CAPTURE</span><h3>Decisions become tracked actions</h3><p>Paste notes or import a Teams or Zoom transcript. TeamSayo proposes decisions and action points; a person confirms. Owners, deadlines, reminders and escalation follow automatically.</p></div>
+    <div class="card"><span class="num">02 · PROVE</span><h3>Reports you can stand behind</h3><p>Draft management, board, client or donor reports in minutes. Every figure links to the record that proves it, and nothing is shared until someone approves it.</p></div>
+    <div class="card"><span class="num">03 · SEE</span><h3>Every company, one view</h3><p>Run several companies or offices in one workspace. See delivery, capacity, development and achievements side by side — or one company at a time.</p></div>
+  </div>
+</div></section>
+
+<section id="features" class="alt"><div class="wrap">
+  <h2>Everything your team runs on</h2>
+  <p class="sub">A configurable team hub, the rhythm of agile delivery and the development of your people — connected, so every KPI is calculated from real records instead of surveys.</p>
+  <div class="grid g4">
+    <div class="card"><div class="ic">🗂</div><h3>Team Hub</h3><p>Attendance, capacity, leave, certifications, mentoring, public speaking, projects and photos — plus any record type you design, no code.</p></div>
+    <div class="card"><div class="ic">🗓</div><h3>Sprint cadence</h3><p>Sprints, guilds and ceremonies with Teams calendar invitations, attendance per meeting and a day-by-day capacity grid.</p></div>
+    <div class="card"><div class="ic">📐</div><h3>Live KPIs</h3><p>Twelve KPIs scored automatically each sprint, with targets, red flags, trends, member scores and a "needs attention" list.</p></div>
+    <div class="card"><div class="ic">✅</div><h3>Accountability</h3><p>Action board with reminders, escalation to managers, evidence of completion and approval steps.</p></div>
+    <div class="card"><div class="ic">🎯</div><h3>Goals & performance</h3><p>OKRs, check-ins, recognition, reviews and anonymous 360° feedback. AI summarises evidence — it never rates people.</p></div>
+    <div class="card"><div class="ic">🤝</div><h3>People development</h3><p>Mentorship goals and sessions, certifications with renewal alerts, public-speaking targets, interview preparation and career tracking.</p></div>
+    <div class="card"><div class="ic">📄</div><h3>Projects & white papers</h3><p>Attach Word, Excel, PowerPoint or PDF files; TeamSayo extracts the key figures and builds a stakeholder white paper with charts.</p></div>
+    <div class="card"><div class="ic">🧮</div><h3>Analytics & Copilot</h3><p>Ask questions in plain language with cited answers, or run SQL over your team data. Export to CSV, Word or PDF.</p></div>
+  </div>
+</div></section>
+
+<section id="who"><div class="wrap">
+  <h2>Built for organisations that answer to others</h2>
+  <p class="sub">If you report to a board, clients, funders or a parent company, TeamSayo gives you the evidence without the spreadsheets.</p>
+  <div class="grid g3">
+    <div class="card"><div class="ic">🏢</div><h3>Groups of companies</h3><p>Studios, agencies and consultancies running several brands or entities that need one view of people, capacity and delivery.</p></div>
+    <div class="card"><div class="ic">🎓</div><h3>Talent & career programmes</h3><p>Academies and development programmes tracking attendance, mentoring, certifications, speaking practice and job-search outcomes.</p></div>
+    <div class="card"><div class="ic">🌍</div><h3>NGOs & development organisations</h3><p>Multi-country teams with donor reporting, results frameworks and evidence requirements — at non-profit pricing.</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:20px">
+    <div class="card"><h3>🔒 Trust by design</h3><ul class="ck"><li>Role-based access and audit log</li><li>Sensitive records visible only to the person, manager and HR</li><li>Employees can see and download their own data</li></ul></div>
+    <div class="card"><h3>✦ Responsible AI</h3><ul class="ck"><li>Every AI statement links to its source</li><li>A person approves before anything is shared</li><li>No AI scoring or ranking of people</li></ul></div>
+    <div class="card"><h3>📦 Your data stays yours</h3><ul class="ck"><li>Backup and merge-import at any time</li><li>Encrypted, read-only offline snapshots</li><li>Import from spreadsheets and existing team hubs</li></ul></div>
+  </div>
+</div></section>
+
+<section id="pricing" class="alt price"><div class="wrap">
+  <h2>Simple pricing</h2>
+  <p class="sub">Per user per month, billed annually. Registered non-profits get 25% off Team and Business.</p>
+  <div class="grid g4">
+    <div class="card"><b>Starter</b><div class="amt">Free</div><div class="per">up to 10 users</div><ul class="ck"><li>Team Hub (3 record types)</li><li>Meetings & accountability</li><li>Dashboard</li></ul></div>
+    <div class="card"><b>Team</b><div class="amt">€6</div><div class="per">per user / month</div><ul class="ck"><li>All record types & custom types</li><li>OKRs, check-ins, recognition</li><li>Copilot, backups, offline export</li></ul></div>
+    <div class="card hot"><b>Business</b><div class="amt">€10</div><div class="per">per user / month</div><ul class="ck"><li>AI reports with sources</li><li>Multi-company group view</li><li>Sprint cadence, KPIs, approvals, API</li></ul></div>
+    <div class="card"><b>Enterprise</b><div class="amt">Custom</div><div class="per">500+ staff, regulated sectors</div><ul class="ck"><li>SSO and SCIM</li><li>Data residency options</li><li>SLA and audit exports</li></ul></div>
+  </div>
+</div></section>
+
+<section><div class="wrap"><div class="cta"><div style="flex:1;min-width:260px"><h2 style="margin:0">See TeamSayo with your own eyes</h2><p>Open the platform and sign in with a demo account — or start a workspace with your sector's template pack.</p></div><a class="btn p" href="app/">Open the platform →</a></div></div></section>
+</main>
+
+<footer><div class="wrap" style="display:flex;gap:18px;flex-wrap:wrap"><span><b style="color:var(--ink)">TeamSayo</b> — From decision to done.</span><span class="sp"></span><span>© <span id="yr">2026</span> TeamSayo · Early-access preview</span></div></footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+</body>
+</html>

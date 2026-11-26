@@ -3,7 +3,8 @@
 From decision to done — workforce performance, accountability and team cadence for groups of companies.
 
 ## Structure
-- `public/` — everything deployed to the web server (currently the single-file prototype `index.html`).
+- `public/` — the TeamSayo platform (single-file app), deployed to `/app/` (production) and `/staging/` (staging).
+- `site/` — the public home page for teamsayo.com, deployed to the website root on production releases.
 - `.github/workflows/deploy.yml` — deploys `public/` to cPanel over FTPS on every push.
 
 ## Deployment
