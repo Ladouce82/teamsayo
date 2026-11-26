@@ -7,12 +7,14 @@ From decision to done — workforce performance, accountability and team cadence
 - `.github/workflows/deploy.yml` — deploys `public/` to cPanel over FTPS on every push.
 
 ## Deployment
-| Branch | Environment | Site |
-|---|---|---|
-| `develop` | staging | staging.teamsayo.com → `public_html/staging` |
-| `main` | production (requires approval) | app.teamsayo.com → `public_html/app` |
+| Branch | Environment | Site | Server folder |
+|---|---|---|---|
+| `develop` | staging (not indexed by search engines) | teamsayo.com/staging/ | `public_html/staging/` |
+| `main` | production (requires approval) | teamsayo.com/app/ | `public_html/app/` |
 
-Each GitHub environment (`staging`, `production`) needs three secrets: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`.
-Use a cPanel FTP account whose home directory is the target folder, so a deployment can only write there.
+Each GitHub environment (`staging`, `production`) needs:
+- secrets `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`
+- variable `SERVER_DIR` (e.g. `public_html/staging/` or `public_html/app/`) when using the main cPanel FTP login.
+  Leave it unset if the FTP account is already limited to the target folder.
 
 Never commit passwords or API keys.
